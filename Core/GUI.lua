@@ -2159,9 +2159,9 @@ local function CreateCooldownViewerSettings(parentContainer, viewerType)
 
     if hasAnchorParent then
         BCDMG:AddAnchors("ElvUI", {"Utility", "Defensives", "Custom", "AdditionalCustom", "Item", "ItemSpell", "Trinkets"}, { ["ElvUF_Player"] = "|cff1784d1ElvUI|r: Player Frame", ["ElvUF_Target"] = "|cff1784d1ElvUI|r: Target Frame", })
-        BCDMG:AddAnchors("UnhaltedUnitFrames", {"Utility", "Defensives", "Custom", "AdditionalCustom", "Item", "ItemSpell", "Trinkets"}, {
-            ["UUF_Player"] = "|cFF8080FFUnhalted Unit Frames|r: Player Frame",
-            ["UUF_Target"] = "|cFF8080FFUnhalted Unit Frames|r: Target Frame",
+        BCDMG:AddAnchors("MidnightSimpleUnitFrames", {"Utility", "Defensives", "Custom", "AdditionalCustom", "Item", "ItemSpell", "Trinkets"}, {
+            ["MSUF_player"] = "|cff38c7f0Midnight Simple Unit Frames|r: Player Frame",
+            ["MSUF_target"] = "|cff38c7f0Midnight Simple Unit Frames|r: Target Frame",
         })
         local anchorToParentDropdown = AG:Create("Dropdown")
         anchorToParentDropdown:SetLabel(LL("Anchor To Parent"))

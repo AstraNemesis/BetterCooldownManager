@@ -1,6 +1,34 @@
 local _, BCDM = ...
 local BetterCooldownManager = LibStub("AceAddon-3.0"):NewAddon("BetterCooldownManager")
 
+local legacyUnitFrameAnchors = {
+    UUF_Player = "MSUF_player",
+    UUF_Target = "MSUF_target",
+}
+
+local unitFrameAnchorViewerTypes = {
+    "Utility",
+    "Defensives",
+    "Custom",
+    "AdditionalCustom",
+    "Item",
+    "ItemSpell",
+    "Trinkets",
+}
+
+local function MigrateUnitFrameAnchors()
+    local cooldownManagerDB = BCDM.db and BCDM.db.profile and BCDM.db.profile.CooldownManager
+    if not cooldownManagerDB then return end
+
+    for _, viewerType in ipairs(unitFrameAnchorViewerTypes) do
+        local viewerDB = cooldownManagerDB[viewerType]
+        local layout = viewerDB and viewerDB.Layout
+        if layout and legacyUnitFrameAnchors[layout[2]] then
+            layout[2] = legacyUnitFrameAnchors[layout[2]]
+        end
+    end
+end
+
 function BetterCooldownManager:OnInitialize()
     BCDM.db = LibStub("AceDB-3.0"):New("BCDMDB", BCDM:GetDefaultDB(), true)
     BCDM.LDS:EnhanceDatabase(BCDM.db, "BetterCooldownManager")
@@ -24,7 +52,11 @@ function BetterCooldownManager:OnInitialize()
         BCDM:EnsureBuffGroups()
     end
     if BCDM.db.global.UseGlobalProfile then BCDM.db:SetProfile(BCDM.db.global.GlobalProfile or "Default") end
-    BCDM.db.RegisterCallback(BCDM, "OnProfileChanged", function() BCDM:UpdateBCDM() end)
+    MigrateUnitFrameAnchors()
+    BCDM.db.RegisterCallback(BCDM, "OnProfileChanged", function()
+        MigrateUnitFrameAnchors()
+        BCDM:UpdateBCDM()
+    end)
 end
 
 function BetterCooldownManager:OnEnable()
